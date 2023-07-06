@@ -1,0 +1,10 @@
+FROM ubuntu:latest AS test1
+RUN apt-get update
+RUN apt-get install default-jdk -y
+RUN apt-get install maven -y
+WORKDIR /app
+COPY . .
+RUN mvn clean install
+
+FROM alpine:latest
+COPY --from=test1 /app/target/hello-world-war-1.0.1.war /opt
